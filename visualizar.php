@@ -1,29 +1,20 @@
 <!doctype html>
 <html lang="es">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Desarrollo de un Sistema CRUD de Empleados en PHP utilizando PDO y MySQL</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Detalles del Empleado</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="assets/css/home.css">
 </head>
-
 <body>
-
-    <h1 class="text-center mt-5 mb-5 fw-bold">Desarrollo de un Sistema CRUD de Empleados en PHP utilizando PDO y MySQL</h1>
-
-    <div class="container">
+    <div class="container mt-5">
         <div class="row justify-content-md-center">
-            <div class="col-md-4" style="border-right: 1px solid #dee2e6;">
-                <?php include("formulario.php"); ?>
-            </div>
             <div class="col-md-8">
                 <h1 class="text-center">
-
                     <a href="./" class="float-start">
-                        <i class="bi bi-arrow-left-circle"> </i>
+                        <i class="bi bi-arrow-left-circle"></i>
                     </a>
                     Datos del empleado
                     <hr>
@@ -31,34 +22,49 @@
                 <?php
                 if (isset($_GET['id'])) {
                     include("config/config.php");
-                    include("acciones/acciones.php");
-                    $id = $_GET['id'];
-                    $dataInfo = obtenerDatosEmpleado($conexion, $id);
+                    
+                    $query = "SELECT 
+                                u.*,
+                                d.nombre_departamento,
+                                e.estado,
+                                (SELECT AVG(calificacion) 
+                                 FROM evaluaciones ev 
+                                 WHERE ev.id_usuario = u.id_usuarios 
+                                 AND anio = YEAR(CURRENT_DATE)) as promedio
+                             FROM usuarios u
+                             LEFT JOIN departamentos d ON u.id_departamento = d.id_departamento
+                             LEFT JOIN estados e ON u.id_estado = e.id_estado
+                             WHERE u.id_usuarios = :id";
+                    
+                    $stmt = $conexion->prepare($query);
+                    $stmt->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
+                    $stmt->execute();
+                    $empleado = $stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    if (!$empleado) {
+                        header("location:./");
+                        exit;
+                    }
+                ?>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Nombre completo: <strong><?php echo $empleado['nombre'] . ' ' . $empleado['apellido']; ?></strong></li>
+                        <li class="list-group-item">Edad: <strong><?php echo $empleado['edad']; ?></strong></li>
+                        <li class="list-group-item">Correo: <strong><?php echo $empleado['correo']; ?></strong></li>
+                        <li class="list-group-item">Puesto: <strong><?php echo $empleado['ocupacion']; ?></strong></li>
+                        <li class="list-group-item">Departamento: <strong><?php echo $empleado['nombre_departamento']; ?></strong></li>
+                        <li class="list-group-item">Estado: <strong><?php echo $empleado['estado']; ?></strong></li>
+                        <li class="list-group-item">Promedio de calificación: <strong><?php echo number_format($empleado['promedio'], 1); ?></strong></li>
+                    </ul>
+                <?php
                 } else {
                     header("location:./");
+                    exit;
                 }
                 ?>
-
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Nombre: <strong> <?php echo $dataInfo['nombre']; ?></strong></li>
-                    <li class="list-group-item">Cédula: <strong><?php echo $dataInfo['cedula']; ?></strong></li>
-                    <li class="list-group-item">Edad: <strong><?php echo $dataInfo['edad']; ?></strong></li>
-                    <li class="list-group-item">Sexo: <strong><?php echo $dataInfo['sexo']; ?></strong></li>
-                    <li class="list-group-item">Teléfono: <strong><?php echo $dataInfo['telefono']; ?></strong></li>
-                    <li class="list-group-item">Cargo: <strong><?php echo $dataInfo['cargo']; ?></strong></li>
-                    <li class="list-group-item">
-                        <strong>Foto de perfil</strong> <br>
-                        <img src="acciones/fotos_empleados/<?php echo $dataInfo['avatar']; ?>" alt='<?php echo $dataInfo['nombre']; ?>' width="100" height="100">
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="assets/js/home.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
