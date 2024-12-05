@@ -3,18 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
-    <link rel="stylesheet" href="login.css" />
-    <title>Login y Registro Moderno</title>
   </head>
   <body>
-    <div class="container" id="container">
-      <!-- Formulario de Registro -->
+    <div id="container" class="container">
       <div class="form-container sign-up">
-        <form id="registroForm" action="registrar_usuario.php" method="POST">
+        <form id="registroForm">
           <h1>Crear Cuenta</h1>
           <div class="social-icons">
             <a href="#" class="icon"
@@ -27,34 +26,19 @@
             ></a>
           </div>
           <span>o usa tu correo para registrarte</span>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Nombre de Usuario"
-            required
-          />
+          <input type="text" name="username" placeholder="Usuario" />
+          <input type="email" name="email" placeholder="Email" />
+          <input type="password" name="password" placeholder="Contraseña" />
           <input
             type="password"
-            id="password"
-            name="password"
-            placeholder="Contraseña"
-            required
-          />
-          <input
-            type="password"
-            id="confirm-password"
             name="confirm-password"
             placeholder="Confirmar Contraseña"
-            required
           />
           <button type="submit">Registrarse</button>
         </form>
       </div>
-
-      <!-- Formulario de Iniciar Sesión -->
       <div class="form-container sign-in">
-        <form id="loginForm" action="validar_login.php" method="POST">
+        <form id="loginForm">
           <h1>Iniciar Sesión</h1>
           <div class="social-icons">
             <a href="#" class="icon"
@@ -67,16 +51,9 @@
             ></a>
           </div>
           <span>o usa tu correo y contraseña</span>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Nombre de Usuario"
-            required
-          />
+          <input type="text" name="username" placeholder="Usuario" required />
           <input
             type="password"
-            id="password"
             name="password"
             placeholder="Contraseña"
             required
@@ -85,8 +62,6 @@
           <button type="submit">Ingresar</button>
         </form>
       </div>
-
-      <!-- Panel de Cambio entre Login y Registro -->
       <div class="toggle-container">
         <div class="toggle">
           <div class="toggle-panel toggle-left">
@@ -108,6 +83,7 @@
       </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="login.js"></script>
   </body>
 </html>

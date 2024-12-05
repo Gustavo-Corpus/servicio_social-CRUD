@@ -1,4 +1,4 @@
-<!-- index.php -->
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -16,8 +16,19 @@
     <?php
     include("config/config.php");
     include("acciones/acciones.php");
+    
+
+
     ?>
-    <h1 class="text-center mt-5 mb-5 fw-bold">Sistema de Empleados por Estado</h1>
+    <div class="container-fluid mt-3 mb-4">
+        <div class="d-flex justify-content-end">
+            <button onclick="cerrarSesion()" class="btn btn-danger me-4">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </button>
+        </div>
+    </div>
+
+<h1 class="text-center fw-bold mb-5">Sistema de Empleados por Estado</h1>
 
     <div class="container">
         <div class="row justify-content-md-center">

@@ -1,7 +1,7 @@
 <?php
 $host = "localhost";
 $usuario = "root";
-$contrasena = "";
+$contrasena = "Xblaster16";
 $base_de_datos = "servicio_social";
 
 try {

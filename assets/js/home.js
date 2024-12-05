@@ -54,6 +54,12 @@ function mostrarEstadisticas() {
   });
 }
 
+function cerrarSesion() {
+  if (confirm("¿Está seguro que desea cerrar sesión?")) {
+    window.location.href = "cerrar_sesion.php";
+  }
+}
+
 function actualizarGraficas(pieData, barData) {
   // Destruir gráficas existentes si las hay
   if (pieChart) pieChart.destroy();

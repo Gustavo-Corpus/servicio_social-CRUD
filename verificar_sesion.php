@@ -1,11 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== true) {
-    http_response_code(401);
-    echo json_encode(['autenticado' => false]);
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header('Location: login.html');
     exit;
 }
-
-echo json_encode(['autenticado' => true]);
-?>

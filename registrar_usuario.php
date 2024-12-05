@@ -2,8 +2,8 @@
 // Datos de conexión (ajusta con tus credenciales)
 $servidor = "localhost";
 $usuario = "root";
-$password = ""; // Cambia a la contraseña que usas para conectar a la base de datos
-$baseDatos = "ss_crud"; // Nombre de la base de datos
+$password = "Xblaster16"; // Cambia a la contraseña que usas para conectar a la base de datos
+$baseDatos = "servicio_social"; // Nombre de la base de datos
 
 // Crear conexión
 $conn = new mysqli($servidor, $usuario, $password, $baseDatos);
