@@ -12,6 +12,7 @@ echo '<div class="table-responsive">
                 <th>Apellido</th>
                 <th>Puesto</th>
                 <th>Promedio</th>
+                <th>Avatar</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -24,6 +25,7 @@ if (isset($_GET['estado']) && !empty($_GET['estado'])) {
                     u.nombre,
                     u.apellido,
                     u.ocupacion as puesto,
+                    u.avatar,
                     COALESCE(
                         (SELECT AVG(e.calificacion) 
                          FROM evaluaciones e 
@@ -41,30 +43,49 @@ if (isset($_GET['estado']) && !empty($_GET['estado'])) {
         
         while ($empleado = $stmt->fetch(PDO::FETCH_ASSOC)) {
             echo '<tr id="empleado_' . $empleado['id'] . '">
-                    <td>' . $empleado['id'] . '</td>
-                    <td>' . htmlspecialchars($empleado['nombre']) . '</td>
-                    <td>' . htmlspecialchars($empleado['apellido']) . '</td>
-                    <td>' . htmlspecialchars($empleado['puesto']) . '</td>
-                    <td>' . number_format($empleado['promedio'], 1) . '</td>
-                    <td>
-                        <a href="visualizar.php?id=' . $empleado['id'] . '" class="btn btn-success btn-sm" title="Ver detalles">
+                <td>' . $empleado['id'] . '</td>
+                <td>' . htmlspecialchars($empleado['nombre']) . '</td>
+                <td>' . htmlspecialchars($empleado['apellido']) . '</td>
+                <td>' . htmlspecialchars($empleado['puesto']) . '</td>
+                <td>' . number_format($empleado['promedio'], 1) . '</td>
+                <td>
+                    <img src="acciones/fotos_empleados/' . $empleado['avatar'] . '" 
+                        alt="Avatar de ' . htmlspecialchars($empleado['nombre']) . '"
+                        class="rounded-circle"
+                        width="50" height="50">
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a href="visualizar.php?id=' . $empleado['id'] . '" 
+                        class="btn btn-success btn-sm me-1" title="Ver detalles">
                             <i class="bi bi-binoculars"></i>
                         </a>
-                        <a href="index.php?id=' . $empleado['id'] . '" class="btn btn-warning btn-sm" title="Editar">
+                        <a href="#" 
+                        class="btn btn-warning btn-sm me-1 btn-editar" 
+                        title="Editar"
+                        onclick="editarEmpleado(' . $empleado['id'] . '); return false;">
                             <i class="bi bi-pencil-square"></i>
                         </a>
-                        <button onclick="eliminarEmpleado(' . $empleado['id'] . ')" class="btn btn-danger btn-sm" title="Eliminar">
+                        <button onclick="eliminarEmpleado(' . $empleado['id'] . ')" 
+                                class="btn btn-danger btn-sm me-1" 
+                                title="Eliminar">
                             <i class="bi bi-trash"></i>
                         </button>
-                    </td>
-                </tr>';
+                        <button type="button" 
+                                class="btn btn-info btn-sm" 
+                                onclick="abrirModalCalificaciones(' . $empleado['id'] . ', \'' . htmlspecialchars($empleado['nombre'] . ' ' . $empleado['apellido'], ENT_QUOTES) . '\')" 
+                                title="Calificaciones">
+                            <i class="bi bi-star"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>';
         }
     } catch(PDOException $e) {
-        echo '<tr><td colspan="6" class="text-danger">Error al cargar los empleados: ' . $e->getMessage() . '</td></tr>';
+        echo '<tr><td colspan="7" class="text-danger">Error al cargar los empleados: ' . $e->getMessage() . '</td></tr>';
     }
 }
 
 echo '</tbody>
     </table>
 </div>';
-?>
